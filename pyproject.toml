@@ -1,0 +1,20 @@
+[project]
+name = "anidl"
+version = "0.1.0"
+description = "An anime downloader and manager"
+readme = "README.md"
+authors = [
+    { name = "BrandenXia", email = "xxtbranden@outlook.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.2.1",
+    "selenium>=4.33.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+anidl = "anidl.__main__:main"
