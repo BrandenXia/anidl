@@ -10,11 +10,18 @@ requires-python = ">=3.13"
 dependencies = [
     "click>=8.2.1",
     "selenium>=4.33.0",
+    "textual>=3.2.0",
+    "tomli-w>=1.2.0",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "textual-dev>=1.7.0",
+]
 
 [project.scripts]
 anidl = "anidl.__main__:main"

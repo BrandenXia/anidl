@@ -1,0 +1,69 @@
+Screen {
+  layers: bottom top;
+  align-horizontal: center;
+}
+
+PopupMenu {
+  align-horizontal: center;
+  border: round $primary;
+  border-title-align: left;
+  padding: 0 1;
+  layer: top;
+  width: 50vw;
+  height: auto;
+  max-height: 50vh;
+}
+
+AppHeader {
+  color: $text-primary;
+  padding: 1 2;
+  height: auto;
+}
+
+AppBody {
+  padding: 0 1;
+}
+
+SelectAnimeDir {
+  padding: 0;
+  max-height: 30vh;
+
+  Input {
+    padding: 0 1;
+    border: none;
+    width: 100%;
+    height: 1;
+    background: $background;
+
+    &:focus {
+      background-tint: white 0%;
+    }
+  }
+
+  Rule {
+    margin: 0;
+  }
+
+  OptionList {
+    height: auto;
+    overflow: hidden auto;
+    background: $background;
+    scrollbar-size: 0 1;
+
+    & > .option-list--option {
+      padding: 0 1;
+    }
+  }
+}
+
+DownloadedList {
+  width: 1fr;
+  border: round $primary;
+  border-title-align: left;
+
+  ListView {
+    overflow: hidden auto;
+    scrollbar-size: 0 1;
+    background: $background;
+  }
+}

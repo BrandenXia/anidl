@@ -1,12 +1,13 @@
 import click
 
-from anidl import hello
+from anidl.ui.app import Anidl
 
 
 @click.command()
 def main():
     """Anime downloader"""
-    print(hello())
+    app = Anidl()
+    app.run()
 
 
 if __name__ == "__main__":

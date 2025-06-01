@@ -29,7 +29,7 @@ class Provider(ABC):
         """
 
     @abstractmethod
-    def download_ep(self, ep_id: EpID, path: Path) -> None:
+    def download_ep(self, ep_id: EpID, path: Path):
         """
         Download an episode by its ID to the specified path.
         Should raise an exception if the download fails.
