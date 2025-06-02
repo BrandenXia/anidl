@@ -28,7 +28,7 @@ class DownloadedList(Vertical):
     def compose(self) -> ComposeResult:
         self.border_title = "Downloaded"
         items = [f"Item {i}" for i in range(1, 100)]
-        yield ListView(*[ListItem(Label(item)) for item in items])
+        yield ListView(*(ListItem(Label(item)) for item in items))
 
 
 class Anidl(App):

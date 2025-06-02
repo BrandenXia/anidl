@@ -28,6 +28,12 @@ class PathValidator(Validator):
 class SelectAnimeDir(PopupMenu):
     BINDINGS = [
         ("tab", "switch_completion", "Switch Completion"),
+        Binding(
+            "shift+tab",
+            "switch_completion(True)",
+            "Switch Completion Reverse",
+            show=False,
+        ),
         Binding("alt+backspace", "delete_word", "Delete Word", show=False),
     ]
 
@@ -52,11 +58,14 @@ class SelectAnimeDir(PopupMenu):
             pass
         ...
 
-    def action_switch_completion(self) -> None:
+    def action_switch_completion(self, rev: bool = False) -> None:
         options_widget = self.query_one(OptionList)
         if len(options_widget.options) > 0:
             # if completions available, go to next option
-            options_widget.action_cursor_down()
+            if not rev:
+                options_widget.action_cursor_down()
+            else:
+                options_widget.action_cursor_up()
 
             if (index := options_widget.highlighted) is not None:
                 # if an option is highlighted,

@@ -36,7 +36,7 @@ AppBody {
 
 SelectAnimeDir {
   padding: 0;
-  max-height: 30vh;
+  height: auto;
 
   Input {
     padding: 0 1;
@@ -55,7 +55,7 @@ SelectAnimeDir {
   }
 
   OptionList {
-    height: auto;
+    height: 20vh;
     overflow: hidden auto;
     background: $background;
     scrollbar-size: 0 1;
