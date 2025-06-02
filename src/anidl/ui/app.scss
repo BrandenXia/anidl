@@ -1,14 +1,24 @@
-Screen {
-  layers: bottom top;
+ScreenCtx {
+  layers: bottom popup alert;
   align-horizontal: center;
 }
 
+Alerts {
+  layer: alert;
+  width: auto;
+  height: auto;
+}
+
+PopupMenuWrapper {
+  layer: popup;
+}
+
 PopupMenu {
+  layer: popup;
   align-horizontal: center;
   border: round $primary;
   border-title-align: left;
   padding: 0 1;
-  layer: top;
   width: 50vw;
   height: auto;
   max-height: 50vh;
