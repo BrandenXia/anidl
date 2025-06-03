@@ -5,8 +5,15 @@ ScreenCtx {
 
 Alerts {
   layer: alert;
-  width: auto;
+  dock: right;
+  margin: 1 2;
   height: auto;
+  width: auto;
+
+  Static {
+    width: auto;
+    padding: 0 1;
+  }
 }
 
 PopupMenuWrapper {

@@ -1,14 +1,22 @@
+import asyncio
+import uuid
+
+from textual import work
 from textual.widget import Widget
-from textual.visual import VisualType
-from textual.message import Message
-from textual import log
+
+from anidl.ui.components import Alerts
+from anidl.ui.components.alert import AlertMsg
 
 
 class AlertCtx(Widget):
-    class Msg(Message):
-        def __init__(self, content: VisualType) -> None:
-            self.content = content
-            super().__init__()
+    @work()
+    async def on_alert_msg(self, msg: AlertMsg) -> None:
+        alerts_widget = self.query_one(Alerts)
+        uuid_str = str(uuid.uuid4())
+        alerts_widget.msgs[uuid_str] = msg
+        alerts_widget.mutate_reactive(Alerts.msgs)
 
-    def on_alert_ctx_msg(self, msg: Msg) -> None:
-        log("AlertCtx received message:", msg.content)
+        await asyncio.sleep(1)
+
+        alerts_widget.msgs.pop(uuid_str)
+        alerts_widget.mutate_reactive(Alerts.msgs)

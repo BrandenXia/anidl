@@ -7,12 +7,8 @@ from textual.widgets import Footer, Label, ListItem, ListView
 from anidl.version import VERSION
 from anidl.config import Config
 
-from .components.select_anime_dir import SelectAnimeDir
+from .components import SelectAnimeDir, Alerts
 from .ctx import Ctx
-
-
-class Alerts(Vertical):
-    pass
 
 
 class AppHeader(Horizontal):
