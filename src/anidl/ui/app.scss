@@ -16,6 +16,25 @@ Alerts {
   }
 }
 
+Toast {
+  background: $background;
+  padding: 0 1;
+  width: 25vw;
+  max-width: 30;
+
+  &.-information {
+    border: round lightseagreen;
+  }
+
+  &.-warning {
+    border: round gold;
+  }
+
+  &.-error {
+    border: round crimson;
+  }
+}
+
 PopupMenuWrapper {
   layer: popup;
 }

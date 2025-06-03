@@ -7,7 +7,7 @@ from textual.widgets import Footer, Label, ListItem, ListView
 from anidl.version import VERSION
 from anidl.config import Config
 
-from .components import SelectAnimeDir, Alerts
+from .components import SelectAnimeDir
 from .ctx import Ctx
 
 
@@ -36,8 +36,6 @@ class Anidl(App):
 
     def compose(self) -> ComposeResult:
         with Ctx():
-            yield Alerts()
-
             if not self.config.anime_dir:
                 yield SelectAnimeDir()
 

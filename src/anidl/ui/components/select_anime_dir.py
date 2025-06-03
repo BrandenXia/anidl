@@ -6,7 +6,6 @@ from textual.binding import Binding
 from textual.validation import Validator, ValidationResult
 from textual.widgets import Input, OptionList, Rule
 
-from anidl.ui.msgs.alert import AlertMsg
 from anidl.utils.path import directory_completion
 
 from .popup import PopupMenu
@@ -56,12 +55,10 @@ class SelectAnimeDir(PopupMenu):
         # TODO: handle the submission
         assert event.validation_result is not None
         if not event.validation_result.is_valid:
-            self.post_message(
-                AlertMsg(
-                    "Warning",
-                    "Validation Failed",
-                    event.validation_result.failure_descriptions[0],
-                )
+            self.notify(
+                event.validation_result.failure_descriptions[0],
+                title="Validation Failed",
+                severity="warning",
             )
 
     def action_switch_completion(self, rev: bool = False) -> None:
