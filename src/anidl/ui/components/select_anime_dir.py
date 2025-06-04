@@ -28,7 +28,14 @@ class PathValidator(Validator):
 
 class SelectAnimeDir(PopupMenu):
     BINDINGS = [
-        ("tab", "switch_completion", "Switch Completion"),
+        Binding("tab", "switch_completion", "Switch Completion", show=False),
+        Binding(
+            "shift+tab",
+            "switch_completion(True)",
+            "Switch Completion Reverse",
+            show=False,
+        ),
+        Binding("ctrl+n", "switch_completion", "Switch Completion", show=False),
         Binding(
             "shift+tab",
             "switch_completion(True)",
