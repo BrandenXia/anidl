@@ -35,6 +35,13 @@ class SelectAnimeDir(PopupMenu):
             "Switch Completion Reverse",
             show=False,
         ),
+        Binding("ctrl+j", "switch_completion", "Switch Completion", show=False),
+        Binding(
+            "ctrl+k",
+            "switch_completion(True)",
+            "Switch Completion Reverse",
+            show=False,
+        ),
         Binding("ctrl+n", "switch_completion", "Switch Completion", show=False),
         Binding(
             "shift+tab",
