@@ -6,6 +6,7 @@ from textual.binding import Binding
 from textual.validation import Validator, ValidationResult
 from textual.widgets import Input, OptionList, Rule
 
+from anidl.config import Config
 from anidl.utils.path import directory_completion
 
 from .popup import PopupMenu
@@ -60,6 +61,8 @@ class SelectAnimeDir(PopupMenu):
                 title="Validation Failed",
                 severity="warning",
             )
+        Config().anime_dir = event.value
+        self.close()
 
     def action_switch_completion(self, rev: bool = False) -> None:
         options_widget = self.query_one(OptionList)

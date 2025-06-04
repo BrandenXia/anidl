@@ -16,7 +16,13 @@ DEFAULT_CONFIG: ConfigDict = {"anime_dir": ""}
 
 
 class Config:
+    _instance = None
     __slots__ = ("config", *DEFAULT_CONFIG.keys())
+
+    def __new__(cls):
+        if not isinstance(cls._instance, cls):
+            cls._instance = super(Config, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self):
         if not CONFIG_DIR.exists():

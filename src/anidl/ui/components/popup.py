@@ -2,4 +2,5 @@ from textual.containers import Vertical
 
 
 class PopupMenu(Vertical):
-    pass
+    def close(self) -> None:
+        self.styles.display = "none"
