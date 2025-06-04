@@ -48,8 +48,8 @@ class SelectAnimeDir(PopupMenu):
     def update_completion(self, value: str) -> None:
         completions = list(map(str, directory_completion(value)))
 
-        rule_widget = self.query_one(Rule)
-        completions_widget = self.query_one(OptionList)
+        rule_widget = self.query_one("#completions_rule_widget", Rule)
+        completions_widget = self.query_one("#completions_widget", OptionList)
         display = "none" if len(completions) == 0 else "block"
         rule_widget.styles.display = completions_widget.styles.display = display
 
@@ -60,7 +60,6 @@ class SelectAnimeDir(PopupMenu):
         self.update_completion(event.value)
 
     def on_input_submitted(self, event: Input.Submitted) -> None:
-        # TODO: handle the submission
         assert event.validation_result is not None
         if not event.validation_result.is_valid:
             self.notify(
@@ -72,7 +71,7 @@ class SelectAnimeDir(PopupMenu):
         self.close()
 
     def action_switch_completion(self, rev: bool = False) -> None:
-        options_widget = self.query_one(OptionList)
+        options_widget = self.query_one("#completions_widget", OptionList)
         if len(options_widget.options) > 0:
             # if completions available, go to next option
             if not rev:
@@ -84,7 +83,7 @@ class SelectAnimeDir(PopupMenu):
                 # if an option is highlighted,
                 # update the input with the selected completion
                 # but prevent the Input.Changed event
-                input_widget = self.query_one(Input)
+                input_widget = self.query_one("#anime_dir_input", Input)
                 with input_widget.prevent(Input.Changed):
                     completed_text = cast(
                         str, options_widget.get_option_at_index(index).prompt
@@ -93,11 +92,11 @@ class SelectAnimeDir(PopupMenu):
                     input_widget.cursor_position = len(completed_text)
         else:
             # if not, try to update completions
-            input_widget = self.query_one(Input)
+            input_widget = self.query_one("#anime_dir_input", Input)
             self.update_completion(input_widget.value)
 
     def action_delete_word(self) -> None:
-        input_widget = self.query_one(Input)
+        input_widget = self.query_one("#anime_dir_input", Input)
         input_widget.action_delete_left_word()
 
     def compose(self) -> ComposeResult:
@@ -107,9 +106,10 @@ class SelectAnimeDir(PopupMenu):
             select_on_focus=False,
             validators=PathValidator(),
             validate_on=["submitted"],
+            id="anime_dir_input",
         )
-        yield Rule()
+        yield Rule(id="completions_rule_widget")
 
-        completions_widget = OptionList(compact=True)
+        completions_widget = OptionList(compact=True, id="completions_widget")
         completions_widget.can_focus = False
         yield completions_widget
