@@ -55,3 +55,6 @@ class Config:
 
         self.config[key] = value
         self.save()
+
+    def get_anime_dir(self) -> Path:
+        return Path(self.anime_dir).expanduser()

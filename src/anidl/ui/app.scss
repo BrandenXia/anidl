@@ -93,6 +93,11 @@ DownloadedList {
   border: round $primary;
   border-title-align: left;
 
+  #no-anime-dir-warning,
+  #no-anime-warning {
+    display: none;
+  }
+
   #download-list-search {
     width: 100%;
     height: 2;
