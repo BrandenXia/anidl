@@ -1,5 +1,3 @@
-from typing import Iterable
-
 from textual import log
 from textual.app import ComposeResult
 from textual.binding import Binding
