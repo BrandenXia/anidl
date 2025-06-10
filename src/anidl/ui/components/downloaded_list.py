@@ -29,7 +29,7 @@ class DownloadedItemList(OptionList):
         [self.action_cursor_up() for _ in range(5)]
 
 
-def get_anime_list() -> list[str]:
+def get_animes() -> list[str]:
     anime_dir = Config().get_anime_dir()
     return (
         [i.name for i in anime_dir.iterdir() if i.is_dir()]
@@ -46,17 +46,25 @@ class DownloadedList(Vertical):
     ]
 
     search_term: Reactive[str] = reactive("")
-    animes: Reactive[list[str]] = reactive(get_anime_list, recompose=True)
-    anime_list: Reactive[Iterable[str]] = reactive(tuple)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.border_title = "Downloaded"
+        self.animes = get_animes()
 
-    def watch_anime_list(self, _: list[str], new: list[str]) -> None:
-        list_widget = self.query_one("#download-list-view", DownloadedItemList)
-        list_widget.clear_options()
-        list_widget.add_options(new)
+    def set_animes(self) -> None:
+        anime_list = (
+            filter(
+                lambda item: self.search_term.lower() in item.lower(),
+                self.animes,
+            )
+            if self.search_term
+            else self.animes
+        )
+
+        downloaded_item_list = self.query_one("#download-list-view", DownloadedItemList)
+        downloaded_item_list.clear_options()
+        downloaded_item_list.add_options(anime_list)
 
     def compose(self) -> ComposeResult:
         with Vertical(id="download-list-search"):
@@ -80,20 +88,34 @@ class DownloadedList(Vertical):
         yield no_anime_warning_widget
 
         yield DownloadedItemList(
+            *self.animes,
             id="download-list-view",
         )
 
-    def display_warnings(self) -> None:
+    def toggle_warnings(self) -> None:
+        no_anime_dir_warning = self.query_one("#no-anime-dir-warning", Label)
+        no_anime_warning = self.query_one("#no-anime-warning", Label)
+
+        def show(widget):
+            widget.styles.display = "block"
+
+        def hide(widget):
+            widget.styles.display = "none"
+
         if not Config().get_anime_dir().exists():
-            self.query_one("#no-anime-dir-warning").styles.display = "block"
-            self.query_one("#no-anime-warning").styles.display = "none"
+            show(no_anime_dir_warning)
+            hide(no_anime_warning)
         elif len(self.animes) == 0:
-            self.query_one("#no-anime-dir-warning").styles.display = "none"
-            self.query_one("#no-anime-warning").styles.display = "block"
+            hide(no_anime_dir_warning)
+            show(no_anime_warning)
+        else:
+            hide(no_anime_dir_warning)
+            hide(no_anime_warning)
 
     def action_refresh(self) -> None:
-        self.animes = get_anime_list()
-        self.display_warnings()
+        self.animes = get_animes()
+        self.toggle_warnings()
+        self.set_animes()
 
     def show_search(self) -> None:
         download_list_search_widget = self.query_one("#download-list-search")
@@ -119,6 +141,7 @@ class DownloadedList(Vertical):
 
     def on_input_changed(self, event: Input.Changed) -> None:
         self.search_term = event.value
+        self.set_animes()
 
     def on_downloaded_item_list_option_selected(
         self, event: DownloadedItemList.OptionSelected
