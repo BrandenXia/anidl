@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import ClassVar, Self
 
 from textual.app import ComposeResult
 from textual.binding import Binding
@@ -6,6 +6,14 @@ from textual.containers import Vertical, Horizontal
 from textual.reactive import Reactive, reactive
 from textual.widgets import Input, Label, OptionList, Rule
 from textual.widget import Widget
+
+
+SEARCH_CONTAINER_CLASS = "search-container"
+SEARCH_LABEL_CLASS = "search-label"
+SEARCH_INPUT_CLASS = "search-input"
+INVALID_WARNING_CLASS = "invalid-warning"
+NO_ITEM_WARNING_CLASS = "no-item-warning"
+LIST_VIEW_CLASS = "list-view"
 
 
 class ItemList(OptionList):
@@ -66,22 +74,24 @@ class SearchList(Vertical):
             else self.items
         )
 
-        item_list_widget = self.query_one(ItemList)
+        item_list_widget = self.list_view
         item_list_widget.clear_options()
         item_list_widget.add_options(displayed_items)
 
     def compose(self) -> ComposeResult:
-        with Vertical(classes="list-search"):
+        with Vertical(classes=SEARCH_CONTAINER_CLASS):
             with Horizontal():
-                yield Label("Search:", classes="search-label")
-                yield Input(classes="search-input", placeholder="Filter by name")
+                yield Label("Search:", classes=SEARCH_LABEL_CLASS)
+                yield Input(classes=SEARCH_INPUT_CLASS, placeholder="Filter by name")
             yield Rule()
 
         invalid_warning = Label(
             self.invalid_message,
-            classes="invalid-warning",
+            classes=INVALID_WARNING_CLASS,
         )
-        no_item_warning = Label(self.no_item_message or "", classes="no-item-warning")
+        no_item_warning = Label(
+            self.no_item_message or "", classes=NO_ITEM_WARNING_CLASS
+        )
         if self.invalid_check():
             invalid_warning.styles.display = "block"
         elif self.no_items_check():
@@ -89,11 +99,31 @@ class SearchList(Vertical):
         yield invalid_warning
         yield no_item_warning
 
-        yield ItemList(*self.items, classes="list-view")
+        yield ItemList(*self.items, classes=LIST_VIEW_CLASS)
+
+    @property
+    def invalid_warning(self) -> Label:
+        return self.query_one("." + INVALID_WARNING_CLASS, Label)
+
+    @property
+    def no_item_warning(self) -> Label:
+        return self.query_one("." + NO_ITEM_WARNING_CLASS, Label)
+
+    @property
+    def search_input(self) -> Input:
+        return self.query_one("." + SEARCH_INPUT_CLASS, Input)
+
+    @property
+    def list_view(self) -> ItemList:
+        return self.query_one("." + LIST_VIEW_CLASS, ItemList)
+
+    @property
+    def search_container(self) -> Vertical:
+        return self.query_one("." + SEARCH_CONTAINER_CLASS, Vertical)
 
     def toggle_warnings(self) -> None:
-        invalid_warning = self.query_one(".invalid-warning", Label)
-        no_item_warning = self.query_one(".no-item-warning", Label)
+        invalid_warning = self.invalid_warning
+        no_item_warning = self.no_item_warning
 
         def show(widget: Widget):
             widget.styles.display = "block"
@@ -117,23 +147,23 @@ class SearchList(Vertical):
         self.set_items()
 
     def show_search(self) -> None:
-        download_list_search_widget = self.query_one(".list-search")
-        download_list_search_widget.styles.visibility = "visible"
-        download_list_search_widget.styles.display = "block"
+        list_search_widget = self.search_container
+        list_search_widget.styles.visibility = "visible"
+        list_search_widget.styles.display = "block"
 
     def hide_search(self) -> None:
-        download_list_search_widget = self.query_one(".list-search")
-        download_list_search_widget.styles.visibility = "hidden"
-        download_list_search_widget.styles.display = "none"
+        list_search_widget = self.search_container
+        list_search_widget.styles.visibility = "hidden"
+        list_search_widget.styles.display = "none"
 
     def action_filter(self) -> None:
         self.show_search()
-        self.query_one(".search-input").focus()
+        self.search_input.focus()
 
     def action_focus_parent(self) -> None:
-        if not self.query_one(".search-input", Input).value:
+        if not self.search_input.value:
             self.hide_search()
-        self.query_one(".list-view").focus()
+        self.list_view.focus()
 
     def on_input_submitted(self, _: Input.Submitted) -> None:
         self.action_focus_parent()
@@ -141,3 +171,11 @@ class SearchList(Vertical):
     def on_input_changed(self, event: Input.Changed) -> None:
         self.search_term = event.value
         self.set_items()
+
+    def focus(self, scroll_visible: bool = True) -> Self:
+        list_view = self.list_view
+        if list_view.styles.display == "none":
+            super().focus(scroll_visible)
+        else:
+            list_view.focus(scroll_visible)
+        return self
