@@ -2,6 +2,8 @@ import asyncio
 import subprocess
 from pathlib import Path
 
+VIDEO_SUFFIXS = [".mp4", ".mkv", ".avi", ".webm", ".flv"]
+
 
 def ensure_ffmpeg_installed():
     """Check if ffmpeg is installed on the system."""

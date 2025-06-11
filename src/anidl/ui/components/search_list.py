@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from typing import ClassVar
 
 from textual.app import ComposeResult
@@ -37,11 +36,11 @@ class SearchList(Vertical):
 
     search_term: Reactive[str] = reactive("")
 
-    type ItemFetcher = Callable[[], list[str]]
-
-    get_items: ItemFetcher
     invalid_message: ClassVar[str] = "Invalid items found."
     no_item_message: ClassVar[str | None] = "No items found."
+
+    def get_items(self) -> list[str]:
+        return []
 
     def __init__(
         self,
