@@ -88,10 +88,13 @@ SelectAnimeDir {
   }
 }
 
-DownloadedList {
-  width: 1fr;
+.window {
   border: round $primary;
   border-title-align: left;
+}
+
+DownloadedList {
+  width: 1fr;
 
   #no-anime-dir-warning,
   #no-anime-warning {
@@ -130,5 +133,14 @@ DownloadedList {
     & > .option-list--option {
       padding: 0 0 0 1;
     }
+  }
+}
+
+EpisodeList {
+  width: 2fr;
+
+  #nothing-selected-warning,
+  #no-episodes-warning {
+    display: none;
   }
 }
