@@ -6,7 +6,7 @@ from textual.widgets import Label
 class EpisodeList(Vertical):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.border_title = "Episode"
+        self.border_title = "Episodes"
 
     def compose(self) -> ComposeResult:
         yield Label("Nothing selected", id="nothing-selected-warning")

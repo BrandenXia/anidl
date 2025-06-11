@@ -93,7 +93,7 @@ class SearchList(Vertical):
         yield ItemList(*self.items, classes="list-view")
 
     def toggle_warnings(self) -> None:
-        invalid_warning = self.query_one(".invalid_warning", Label)
+        invalid_warning = self.query_one(".invalid-warning", Label)
         no_item_warning = self.query_one(".no-item-warning", Label)
 
         def show(widget: Widget):
@@ -132,7 +132,7 @@ class SearchList(Vertical):
         self.query_one(".search-input").focus()
 
     def action_focus_parent(self) -> None:
-        if not self.query_one("#search-input", Input).value:
+        if not self.query_one(".search-input", Input).value:
             self.hide_search()
         self.query_one(".list-view").focus()
 
