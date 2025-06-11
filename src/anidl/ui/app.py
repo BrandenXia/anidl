@@ -1,13 +1,13 @@
 from pathlib import Path
 
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Vertical
+from textual.containers import Horizontal
 from textual.widgets import Footer, Label
 
 from anidl.version import VERSION
 from anidl.config import Config
 
-from .components import SelectAnimeDir, DownloadedList
+from .components import SelectAnimeDir, AnimeList, EpisodeList
 from .ctx import Ctx
 
 
@@ -16,7 +16,7 @@ class AppHeader(Horizontal):
         yield Label(f"[b]Anidl[/] [dim]{VERSION}[/]", id="app-title")
 
 
-class AppBody(Vertical):
+class AppBody(Horizontal):
     pass
 
 
@@ -30,5 +30,6 @@ class Anidl(App):
 
             yield AppHeader()
             with AppBody():
-                yield DownloadedList()
+                yield AnimeList(classes="window")
+                yield EpisodeList(classes="window")
             yield Footer()

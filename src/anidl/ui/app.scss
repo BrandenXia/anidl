@@ -88,17 +88,15 @@ SelectAnimeDir {
   }
 }
 
-DownloadedList {
-  width: 1fr;
+.window {
   border: round $primary;
   border-title-align: left;
+}
 
-  #no-anime-dir-warning,
-  #no-anime-warning {
-    display: none;
-  }
+SearchList {
+  width: 1fr;
 
-  #download-list-search {
+  .list-search {
     width: 100%;
     height: 2;
     visibility: hidden;
@@ -120,7 +118,12 @@ DownloadedList {
     }
   }
 
-  DownloadedItemList {
+  .invalid-warning,
+  .no-item-warning {
+    display: none;
+  }
+
+  ItemList {
     border: none;
     overflow: hidden auto;
     scrollbar-size: 0 1;
@@ -131,4 +134,8 @@ DownloadedList {
       padding: 0 0 0 1;
     }
   }
+}
+
+EpisodeList {
+  width: 2fr;
 }

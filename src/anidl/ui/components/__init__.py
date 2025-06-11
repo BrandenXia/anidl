@@ -1,7 +1,9 @@
 from .select_anime_dir import SelectAnimeDir
-from .downloaded_list import DownloadedList
+from .anime_list import AnimeList
+from .episode_list import EpisodeList
 
 __all__ = [
     "SelectAnimeDir",
-    "DownloadedList",
+    "AnimeList",
+    "EpisodeList",
 ]
