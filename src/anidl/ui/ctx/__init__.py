@@ -3,14 +3,14 @@ from typing import Self
 
 from textual.widget import Widget
 
-from .global_assign import AssignCtx
+from .global_operation import OperationCtx
 
 
 class ScreenCtx(Widget):
     pass
 
 
-ctxs: list[type] = [AssignCtx]
+ctxs: list[type] = [OperationCtx]
 _ctxs = [*ctxs, ScreenCtx]  # keep ScreenCtx at the end to emulate `Screen` in CSS
 
 

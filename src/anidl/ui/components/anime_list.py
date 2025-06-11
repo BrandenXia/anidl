@@ -1,7 +1,7 @@
 from textual import on
 
 from anidl.config import Config
-from anidl.ui.ctx import AssignCtx
+from anidl.ui.ctx import OperationCtx
 
 from .episode_list import EpisodeList
 from .search_list import SearchList, ItemList
@@ -30,8 +30,13 @@ class AnimeList(SearchList):
 
     @on(ItemList.OptionSelected)
     def on_item_selected(self, event: ItemList.OptionSelected) -> None:
-        self.post_message(
-            AssignCtx.Assign(
-                "#episode-list", EpisodeList, "selected_anime", event.option.prompt
+        def assign_selected(list_widget: EpisodeList) -> None:
+            assert isinstance(event.option.prompt, str), (
+                "Expected prompt to be a string, got: "
+                f"{type(event.option.prompt).__name__}"
             )
+            list_widget.selected_anime = event.option.prompt
+
+        self.post_message(
+            OperationCtx.Operation("#episode-list", EpisodeList, assign_selected),
         )
