@@ -1,12 +1,13 @@
+from collections.abc import Collection, Iterable
 from typing import ClassVar, Self
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Vertical, Horizontal
+from textual.containers import Horizontal, Vertical
 from textual.reactive import Reactive, reactive
-from textual.widgets import Input, Label, OptionList, Rule
 from textual.widget import Widget
-
+from textual.widgets import Input, Label, OptionList, Rule
+from textual.widgets.option_list import Option
 
 SEARCH_CONTAINER_CLASS = "search-container"
 SEARCH_LABEL_CLASS = "search-label"
@@ -26,11 +27,11 @@ class ItemList(OptionList):
         Binding("alt+k", "cursor_up_5", "Cursor up 5", show=False),
     ]
 
-    def action_cursor_down_5(self) -> None:
+    def action_cursor_down_5(self):
         """Move cursor down by 5 items."""
         [self.action_cursor_down() for _ in range(5)]
 
-    def action_cursor_up_5(self) -> None:
+    def action_cursor_up_5(self):
         """Move cursor up by 5 items."""
         [self.action_cursor_up() for _ in range(5)]
 
@@ -47,7 +48,7 @@ class SearchList(Vertical):
     invalid_message: ClassVar[str] = "Invalid items found."
     no_item_message: ClassVar[str | None] = "No items found."
 
-    def get_items(self) -> list[str]:
+    def get_items(self) -> Collection[str | Option]:
         return []
 
     def __init__(
@@ -64,15 +65,17 @@ class SearchList(Vertical):
     def no_items_check(self) -> bool:
         return len(self.items) == 0 and self.no_item_message is not None
 
-    def set_items(self) -> None:
-        displayed_items = (
-            filter(
-                lambda item: self.search_term.lower() in item.lower(),
-                self.items,
-            )
-            if self.search_term
-            else self.items
+    def search_items(self) -> Iterable[str | Option]:
+        return filter(
+            lambda item: (
+                self.search_term.lower()
+                in (item if isinstance(item, str) else str(item.prompt))
+            ),
+            self.items,
         )
+
+    def set_items(self) -> None:
+        displayed_items = self.search_items() if self.search_term else self.items
 
         item_list_widget = self.list_view
         item_list_widget.clear_options()
