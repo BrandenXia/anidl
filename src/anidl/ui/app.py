@@ -4,10 +4,10 @@ from textual.app import App, ComposeResult
 from textual.containers import Horizontal
 from textual.widgets import Footer, Label
 
-from anidl.version import VERSION
 from anidl.config import Config
+from anidl.version import VERSION
 
-from .components import SelectAnimeDir, AnimeList, EpisodeList
+from .components import AnimeList, EpisodeList, SelectAnimeDir
 from .ctx import Ctx
 
 
