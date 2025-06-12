@@ -36,6 +36,8 @@ class AnimeList(SearchList):
                 f"{type(event.option.prompt).__name__}"
             )
             list_widget.selected_anime = event.option.prompt
+            list_widget.action_refresh()
+            list_widget.focus()
 
         self.post_message(
             OperationCtx.Operation("#episode-list", EpisodeList, assign_selected),
