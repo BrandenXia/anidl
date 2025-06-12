@@ -1,6 +1,6 @@
 import tomllib
 from pathlib import Path
-from typing import TypedDict, cast
+from typing import Literal, TypedDict, cast
 
 import tomli_w
 
@@ -10,6 +10,9 @@ CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 class ConfigDict(TypedDict):
     anime_dir: str
+
+
+type ConfigDictKeys = Literal["anime_dir"]
 
 
 DEFAULT_CONFIG: ConfigDict = {"anime_dir": ""}
@@ -24,7 +27,7 @@ class Config:
             cls._instance = super(Config, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         if not CONFIG_DIR.exists():
             CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -43,7 +46,7 @@ class Config:
         if key not in self.config:
             raise AttributeError(f"Config has no attribute '{key}'")
 
-        return self.config[key]
+        return self.config[cast(ConfigDictKeys, key)]
 
     def __setattr__(self, key: str, value: str):
         if key == "config":
@@ -53,7 +56,7 @@ class Config:
         if key not in self.config:
             raise AttributeError(f"Config has no attribute '{key}'")
 
-        self.config[key] = value
+        self.config[cast(ConfigDictKeys, key)] = value
         self.save()
 
     def get_anime_dir(self) -> Path:
