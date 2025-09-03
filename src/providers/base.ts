@@ -1,6 +1,6 @@
 type OnlyLiteralKeys<T> = string extends keyof T ? never : T;
 
-type BaseProviderOpts = {
+type ProviderOpts = {
   AnimeID: unknown;
   EpID: unknown;
   SearchOpts: object;
@@ -8,7 +8,7 @@ type BaseProviderOpts = {
   DownloadOpts: object;
 };
 
-type BaseProviderDefaultOpts = {
+type ProviderDefaultOpts = {
   AnimeID: string;
   EpID: string;
   SearchOpts: {};
@@ -16,13 +16,28 @@ type BaseProviderDefaultOpts = {
   DownloadOpts: {};
 };
 
-type ResolveProviderOptions<TOverrides extends Partial<BaseProviderOpts>> =
-  BaseProviderDefaultOpts & TOverrides;
+type ResolveProviderOptions<TOverrides extends Partial<ProviderOpts>> =
+  ProviderDefaultOpts & TOverrides;
 
-type BaseProvider<TOverrides extends Partial<BaseProviderOpts> = {}> =
+type BaseCacheOpts =
+  | boolean
+  | {
+      /** maxAge is in seconds */
+      maxAge: number;
+    };
+type CacheOpts =
+  | BaseCacheOpts
+  | {
+      search?: BaseCacheOpts;
+      getEps?: BaseCacheOpts;
+      download?: BaseCacheOpts;
+    };
+
+type Provider<TOverrides extends Partial<ProviderOpts> = {}> =
   ResolveProviderOptions<TOverrides> extends infer TOpts
-    ? TOpts extends BaseProviderOpts // Safety check on the inferred type
+    ? TOpts extends ProviderOpts // Safety check on the inferred type
       ? {
+          cache?: CacheOpts;
           search: (
             query: string,
             opts?: OnlyLiteralKeys<TOpts["SearchOpts"]>,
@@ -39,3 +54,5 @@ type BaseProvider<TOverrides extends Partial<BaseProviderOpts> = {}> =
         }
       : never
     : never;
+
+export type { Provider };
