@@ -13,6 +13,8 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@keyv/sqlite": "^4.0.5",
+    "keyv": "^5.5.0",
     "playwright": "^1.55.0"
   }
 }
