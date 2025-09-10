@@ -1,16 +1,23 @@
 type IdBase = string | { text: string };
-type NextPage<T> = { hasNext: boolean; next: () => T };
+// not using this because interface cannot extend union types
+// type NextPage<T> =
+//   | { hasNext: true; next: () => Promise<T> }
+//   | { hasNext: false; next?: undefined };
+type NextPage<T> = { hasNext: boolean; next?: () => Promise<T> };
+
 interface SResultsSub<TSearchId extends IdBase>
   extends NextPage<SResultsSub<TSearchId>> {
+  page: "sub";
   results: TSearchId[];
 }
 interface SResultsDownload<TDownloadId extends IdBase>
   extends NextPage<SResultsDownload<TDownloadId>> {
+  page: "download";
   results: TDownloadId[];
 }
 type SResults<TSearchId extends IdBase, TDownloadId extends IdBase> =
-  | ({ page: "sub" } & SResultsSub<TSearchId>)
-  | ({ page: "download" } & SResultsDownload<TDownloadId>);
+  | SResultsSub<TSearchId>
+  | SResultsDownload<TDownloadId>;
 
 type ProviderOpts = {
   searchId: IdBase;
@@ -22,8 +29,11 @@ type ProviderDefaultOpts = {
   downloadId: string;
 };
 
-type ResolveProviderOptions<TOverrides extends Partial<ProviderOpts>> =
-  ProviderDefaultOpts & TOverrides;
+type ResolveProviderOptions<TOverrides extends Partial<ProviderOpts>> = Omit<
+  ProviderDefaultOpts,
+  keyof TOverrides
+> &
+  TOverrides;
 
 type Provider<TOverrides extends Partial<ProviderOpts> = {}> =
   ResolveProviderOptions<TOverrides> extends infer TOpts
@@ -38,4 +48,4 @@ type Provider<TOverrides extends Partial<ProviderOpts> = {}> =
       : never
     : never;
 
-export type { Provider };
+export type { Provider, SResults, SResultsSub, SResultsDownload };

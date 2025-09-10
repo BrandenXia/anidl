@@ -1,8 +1,3 @@
-import { chromium } from "playwright";
+import { QdmProvider } from "./providers";
 
-const browser = await chromium.launch();
-const page = await browser.newPage();
-await page.goto("http://example.com");
-await page.screenshot({ path: `example.png` });
-await browser.close();
-
+await QdmProvider.search("在地下城");
